@@ -1,7 +1,7 @@
 [project]
 name = "kivi-var"
 version = "0.1.0"
-description = "Real low-bit (KIVI) KV-cache quantization for Visual Autoregressive Modeling (VAR)"
+description = "Low-bit (KIVI) KV-cache quantization for Visual Autoregressive Modeling (VAR)"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [

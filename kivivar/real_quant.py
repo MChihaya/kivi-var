@@ -1,13 +1,12 @@
-"""REAL low-bit KV cache for VAR (not fake-quant): the cache is actually stored as
-packed low-bit integers (int8 / int4 / int2) plus KIVI scales, and is dequantized
-only transiently, per layer, at attention time. This genuinely reduces the persistent
-KV-cache memory (and the measured peak at large batch), unlike fake quantization.
+"""Packed low-bit KV cache for VAR: the cache is stored as packed low-bit integers
+(int8 / int4 / int3 / int2) plus KIVI scales, and is dequantized only transiently,
+per layer, at attention time. This reduces the persistent KV-cache memory (and the
+measured peak at large batch).
 
 KIVI scheme: Key quantized per-channel (scale shared over tokens), Value per-token
-(scale shared over channels) — identical numerics to kv_compression.quant.fake_quant,
-so generated images match the fake-quant pipeline.
+(scale shared over channels).
 
-Forces the slow (SDPA) attention path because the cache is materialized on read.
+Forces the standard (SDPA) attention path because the cache is materialized on read.
 Controlled by RealKVConfig set via apply_real_quant(var, cfg).
 """
 import math

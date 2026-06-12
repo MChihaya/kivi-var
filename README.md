@@ -1,14 +1,14 @@
-# KIVI-VAR: real low-bit KV-cache quantization for VAR
+# KIVI-VAR: low-bit KV-cache quantization for VAR
 
-Source code to reproduce the **core experiments** of the report *"VAR における KV キャッシュ量子化の
-失敗事例分析と省メモリ化の検討"*, on **VAR-d16**:
+Source code to reproduce the **core experiments** of the accompanying course report
+(映像メディア学, on KV-cache quantization for VAR), using **VAR-d16**:
 
 1. **KIVI** asymmetric quantization (Key per-channel, Value per-token) keeps generation quality
    closer to the FP16 output than uniform (per-token) quantization at the same bit width.
-2. The **real packed-integer KV cache** actually reduces the stored cache size and the peak GPU
-   memory (unlike a quantize-then-dequantize scheme, which would leave the cache in full precision).
+2. The **packed-integer KV cache** reduces both the stored cache size and the peak GPU
+   memory (a quantize-then-dequantize scheme would leave the cache in full precision).
 
-The cache is stored as actually packed low-bit integers (int8/int4/int3/int2) plus small KIVI
+The cache is stored as packed low-bit integers (int8/int4/int3/int2) plus small KIVI
 scales, and is dequantized only one layer at a time at attention time.
 
 ## Setup (uv recommended)
@@ -16,7 +16,7 @@ scales, and is dequantized only one layer at a time at attention time.
 Requires a CUDA GPU. Install [uv](https://docs.astral.sh/uv/), then from the repo root:
 
 ```bash
-uv sync                  # create the environment and install deps (PyTorch cu121, lpips, ...)
+uv sync                  # create the environment and install deps (PyTorch cu121, torch-fidelity, ...)
 bash scripts/prepare.sh  # clone the VAR code into ./VAR and download checkpoints into ./checkpoints
 ```
 
@@ -26,10 +26,10 @@ checkpoints (`var_d16.pth`, `vae_ch160v4096z32.pth`) from the official Hugging F
 ## Run the core experiments
 
 ```bash
-# 1. KIVI vs uniform quantization quality (LPIPS to the FP16 output; lower = closer to no quantization)
+# 1. KIVI vs uniform quantization quality (FID to the FP16 output; lower = closer to no quantization)
 uv run experiments/kivi_vs_uniform.py
 
-# 2. Real KV-cache size and peak GPU memory, per precision x batch
+# 2. KV-cache size and peak GPU memory, per precision x batch
 uv run experiments/memory_benchmark.py
 ```
 
@@ -65,7 +65,7 @@ cache is packed (try `uv run experiments/memory_benchmark.py --batches 256` on a
 
 ## Layout
 
-- `kivivar/real_quant.py` — the real packed-int KV cache (core implementation; KIVI = Key
+- `kivivar/real_quant.py` — the packed-int KV cache (core implementation; KIVI = Key
   per-channel, Value per-token; a generalized bit-packer handles INT3 with no waste).
 - `kivivar/evict.py` — a scale-aware token-discard baseline (the report compares quantization
   against it under a matched memory budget).

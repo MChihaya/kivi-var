@@ -2,7 +2,7 @@
 
 KIVI (Key per-channel, Value per-token) keeps the generated *distribution* closer to the FP16
 (no-quantization) output than uniform (per-token) quantization at the same bit width. The cache
-is the REAL packed-int KV cache (kivivar.real_quant). The metric is FID between each config's
+is the packed-int KV cache (kivivar.real_quant). The metric is FID between each config's
 images and the FP16 images -- a distribution-level metric, robust to the fact that quantization
 changes individual stochastic sampling trajectories (so a per-image metric like LPIPS is noisy).
 
