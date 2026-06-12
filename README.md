@@ -1,7 +1,7 @@
 # KIVI-VAR: low-bit KV-cache quantization for VAR
 
-Source code to reproduce the **core experiments** of the accompanying course report
-(映像メディア学, on KV-cache quantization for VAR), using **VAR-d16**:
+Source code to reproduce the accompanying course report (映像メディア学, on KV-cache
+quantization for VAR). Two **core experiments** run out of the box on **VAR-d16**:
 
 1. **KIVI** asymmetric quantization (Key per-channel, Value per-token) keeps generation quality
    closer to the FP16 output than uniform (per-token) quantization at the same bit width.
@@ -63,6 +63,15 @@ see directly that INT2 uniform breaks the subject while INT2 KIVI keeps it.
 The int4 cache is ~3.6× smaller than fp16; batch 256 runs out of memory in fp16 but fits when the
 cache is packed (try `uv run experiments/memory_benchmark.py --batches 256` on an 80 GB GPU).
 
+## Full reproduction, item by item
+
+[`analysis/`](analysis/) contains the scripts behind **every table and figure** in the report —
+the failure-case analyses (OCR, high-frequency/phase, class-wise collapse), the quantization
+sweeps, the blocking experiments, the matched-budget comparison (incl. mixed precision and
+token discard), and the Infinity-2B study. See [`analysis/README.md`](analysis/README.md) for
+the item-by-item map. Analyses that compare against real images additionally require a local
+ImageNet-1k (`uv sync --extra analysis` installs the extra dependencies).
+
 ## Layout
 
 - `kivivar/real_quant.py` — the packed-int KV cache (core implementation; KIVI = Key
@@ -70,8 +79,6 @@ cache is packed (try `uv run experiments/memory_benchmark.py --batches 256` on a
 - `kivivar/evict.py` — a scale-aware token-discard baseline (the report compares quantization
   against it under a matched memory budget).
 - `kivivar/varload.py` — load VAR-d16 from a VAR checkout and its checkpoints.
-- `experiments/` — the runnable core experiments.
+- `experiments/` — the two runnable core experiments.
+- `analysis/` — the full per-item reproduction scripts (see above).
 - `scripts/prepare.sh` — fetch the VAR code and checkpoints.
-
-The full study (failure-case analysis, scale ablation, token-discard comparison, and the
-generalization to the Infinity-2B model) is described in the report.

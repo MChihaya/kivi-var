@@ -1,0 +1,29 @@
+{
+  "_note": "ImageNet-1k indices (standard sorted-wnid order; matches VAR label_B and torchvision categories). Verified via torchvision ResNet50_Weights meta.",
+  "text": {
+    "919": "street sign",
+    "921": "book jacket",
+    "530": "digital clock",
+    "916": "web site",
+    "922": "menu",
+    "917": "comic book",
+    "664": "monitor"
+  },
+  "human_face": {
+    "796": "ski mask"
+  },
+  "animal_detail": {
+    "281": "tabby cat",
+    "259": "Pomeranian"
+  },
+  "fine_structure": {
+    "488": "chain",
+    "489": "chainlink fence",
+    "595": "harvester"
+  },
+  "reference_easy": {
+    "980": "volcano",
+    "437": "beacon",
+    "562": "fountain"
+  }
+}
