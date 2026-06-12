@@ -11,6 +11,18 @@ dependencies = [
     "pillow",
     "scipy",
     "torch-fidelity",
+    "huggingface-hub",  # imported by the VAR model code
+]
+
+[project.optional-dependencies]
+# for the full per-item reproduction under analysis/ (OCR, face detection, LPIPS, figures)
+analysis = [
+    "easyocr",
+    "insightface",
+    "onnxruntime-gpu",
+    "lpips",
+    "matplotlib",
+    "opencv-python-headless",
 ]
 
 # Pin the CUDA 12.1 PyTorch wheels (Linux); lab/server drivers commonly cap at CUDA 12.4.
