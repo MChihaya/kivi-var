@@ -9,6 +9,7 @@ environment variables); the logic is untouched.
 
 ```bash
 uv sync --extra analysis     # core deps + easyocr / insightface / lpips / matplotlib
+                             # (first run builds insightface from source — can take ~15 min; not a hang)
 bash scripts/prepare.sh      # VAR code into ./VAR, checkpoints into ./checkpoints
 
 export IMAGENET_VAL=/path/to/imagenet/val      # analyses that read real images
