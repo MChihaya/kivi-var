@@ -15,14 +15,18 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-# for the full per-item reproduction under analysis/ (OCR, face detection, LPIPS, figures)
+# For the full per-item reproduction under analysis/ (OCR, face detection, LPIPS, figures).
+# Pinned to the environment that produced the report (CPython 3.10); these exact versions
+# coexist and all ship cp310 wheels. NOTE: the original env used the CPU `onnxruntime`
+# (insightface/RetinaFace runs on it) — `onnxruntime-gpu` recent releases dropped cp310 wheels
+# and would break `uv sync` on Python 3.10.
 analysis = [
-    "easyocr",
-    "insightface",
-    "onnxruntime-gpu",
-    "lpips",
-    "matplotlib",
-    "opencv-python-headless",
+    "easyocr==1.7.2",
+    "insightface==1.0.1",
+    "onnxruntime==1.23.2",
+    "lpips==0.1.4",
+    "matplotlib==3.10.9",
+    "opencv-python-headless==4.11.0.86",
 ]
 
 # Pin the CUDA 12.1 PyTorch wheels (Linux); lab/server drivers commonly cap at CUDA 12.4.
