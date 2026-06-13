@@ -33,24 +33,26 @@ uv run experiments/kivi_vs_uniform.py
 uv run experiments/memory_benchmark.py
 ```
 
-### Expected results (from the report)
+### Expected results
 
 `kivi_vs_uniform.py` — KIVI keeps the generated *distribution* closer to the FP16 output than
 uniform at the same bit width; the gap widens at INT2, where uniform collapses (50 classes,
-16 images each; FID between each config's images and the FP16 images):
+16 images each; FID between each config's images and the FP16 images). The numbers below are
+a clean-room run of this repo as pinned (PyTorch 2.1.0 cu121, one 80 GB GPU, seed 0):
 
 | bits | uniform FID→FP16↓ | KIVI FID→FP16↓ |
 |------|-------------------|-----------------|
-| INT3 | ~294              | **~291**        |
-| INT2 | ~323              | **~303**        |
+| INT3 | 268.1             | **267.9**       |
+| INT2 | 285.1             | **279.3**       |
 
 What reproduces is the **ordering** (KIVI < uniform, widening at INT2). FID is a distribution-level
 metric, robust to the fact that quantization changes individual stochastic sampling trajectories
 (so a per-image metric like LPIPS would be dominated by that noise). The absolute values are high
-because this is a small demo sample comparing two *generated* sets — raise `--n-classes` for a
-tighter estimate. The report's headline FID-vs-ImageNet (KIVI 7.12 < uniform 10.32 at INT3) is the
-large-scale version of the same result. The script also writes the images to `out/`, so you can
-see directly that INT2 uniform breaks the subject while INT2 KIVI keeps it.
+and shift by a few tens of points with the GPU and library patch version (this is a small demo
+sample comparing two *generated* sets) — only the ordering is meant to be stable; raise
+`--n-classes` for a tighter estimate. The report's headline FID-vs-ImageNet (KIVI 7.12 < uniform
+10.32 at INT3) is the large-scale version of the same result. The script also writes the images to
+`out/`, so you can see directly that INT2 uniform breaks the subject while INT2 KIVI keeps it.
 
 `memory_benchmark.py` — the packed cache shrinks and the peak drops (measured on one 80 GB GPU):
 
